@@ -1,12 +1,15 @@
 ﻿using PollContext.Domain.Entities;
+using System;
 
 namespace PollContext.Domain.Repositories
 {
     public interface IPollRepository
     {
-        void CreatePoll(Poll poll);
+        void Create(Poll poll);
+        
+        void Update(Poll poll);
 
-        Poll GetPollById(int id);
+        Poll GetPollById(Guid id);
 
     }
 }

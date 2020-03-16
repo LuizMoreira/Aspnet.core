@@ -36,15 +36,34 @@ namespace PollContext.Domain.Handlers
                 poll.addOptions(option);
             }
 
-            _pollRepository.CreatePoll(poll);
+            _pollRepository.Create(poll);
 
             //TODO: retornar o obj DTO para evitar retornar nossa entity0
             return new GenericCommandResult(true, "Enquete salva com sucesso", poll);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         public ICommandResult Handle(UpdateViewsPollCommand command)
         {
-            throw new NotImplementedException();
+            command.Validate();
+            if (command.Invalid)
+                return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+
+            //obtem a enquete por id
+            var poll = _pollRepository.GetPollById(command.Poll_Id);
+            
+            //incrementa a visualização
+            poll.increaseView();
+
+            // salva a alteração feita na views
+            _pollRepository.Update(poll);
+
+            //TODO: retornar o obj DTO para evitar retornar nossa entity0
+            return new GenericCommandResult(true, "Enquete salva com sucesso", poll);
         }
 
         public ICommandResult Handle(VoteOptionPollCommand command)
