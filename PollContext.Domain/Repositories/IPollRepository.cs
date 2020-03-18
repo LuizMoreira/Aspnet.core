@@ -1,5 +1,6 @@
 ﻿using PollContext.Domain.Entities;
 using System;
+using System.Linq.Expressions;
 
 namespace PollContext.Domain.Repositories
 {
@@ -9,7 +10,7 @@ namespace PollContext.Domain.Repositories
         
         void Update(Poll poll);
 
-        Poll GetPollById(Guid id);
+        Poll GetById(Guid id);
 
     }
 }

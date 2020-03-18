@@ -1,5 +1,6 @@
 ﻿using PollContext.Domain.ValueObjects;
 using PollContext.Shared.Entities;
+using System;
 
 namespace PollContext.Domain.Entities
 {
@@ -17,11 +18,16 @@ namespace PollContext.Domain.Entities
         //set private evita manipulação fora da criação da classe; caso seja necessário alterar, vms criar um método de alterar a propriedade
         public DescriptionVO Description { get; private set; }
 
-        public int Poll_Id { get; private set; }
+        public Guid Poll_Id { get; private set; }
 
         public Poll Poll { get; private set; }
 
         public int Qty { get; private set; }
+
+        public void increaseQty()
+        {
+            Qty += 1;
+        }
 
     }
 }

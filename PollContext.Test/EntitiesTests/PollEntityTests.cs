@@ -1,17 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PollContext.Domain.Entities;
 using PollContext.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PollContext.Test.EntitiesTests
+namespace PollContext.Test.EntitiesTest
 {
     [TestClass]
-    public class PollTests
+    public class PollEntityTests
     {
         [TestMethod]
-        public void Poll_whenCreateObject_returnPoll()
+        public void Poll_whenCreateObject2_returnPoll()
         {
             DescriptionVO description = new DescriptionVO("poll 1");
             Poll poll = new Poll(description);
@@ -28,7 +25,7 @@ namespace PollContext.Test.EntitiesTests
         }
 
         [TestMethod]
-        public void Poll_whenCreateObject_returnNotification()
+        public void Poll_whenCreateObject3_returnNotification()
         {
             DescriptionVO description = new DescriptionVO("");
             Poll poll = new Poll(description);

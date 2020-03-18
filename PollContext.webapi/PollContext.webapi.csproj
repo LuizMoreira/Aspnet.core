@@ -9,7 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PollContext.Domain\PollContext.Domain.csproj" />
+    <ProjectReference Include="..\PollContext.Infra\PollContext.Infra.csproj" />
   </ItemGroup>
 
 

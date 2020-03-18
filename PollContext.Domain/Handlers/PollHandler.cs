@@ -10,7 +10,7 @@ using System;
 
 namespace PollContext.Domain.Handlers
 {
-    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<UpdateViewsPollCommand>, IHandler<VoteOptionPollCommand>
+    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<UpdateViewsPollCommand>
     {
         private readonly IPollRepository _pollRepository;
 
@@ -54,7 +54,7 @@ namespace PollContext.Domain.Handlers
                 return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
 
             //obtem a enquete por id
-            var poll = _pollRepository.GetPollById(command.Poll_Id);
+            var poll = _pollRepository.GetById(command.Poll_Id);
             
             //incrementa a visualização
             poll.increaseView();
@@ -66,9 +66,5 @@ namespace PollContext.Domain.Handlers
             return new GenericCommandResult(true, "Enquete salva com sucesso", poll);
         }
 
-        public ICommandResult Handle(VoteOptionPollCommand command)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

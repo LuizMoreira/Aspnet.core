@@ -1,8 +1,6 @@
 ﻿using PollContext.Domain.Entities;
 using PollContext.Domain.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PollContext.Test.Repositories
 {
@@ -16,7 +14,7 @@ namespace PollContext.Test.Repositories
         {
 
         }
-        public Poll GetPollById(Guid id)
+        public Poll GetById(Guid id)
         {
             return null;
         }

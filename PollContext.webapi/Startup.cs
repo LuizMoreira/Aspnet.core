@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PollContext.Infra.Contexts;
+using Microsoft.EntityFrameworkCore;
+using PollContext.Domain.Handlers;
+using PollContext.Domain.Repositories;
+using PollContext.Infra.Repositories;
 
 namespace PollContext.webapi
 {
@@ -15,13 +20,18 @@ namespace PollContext.webapi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            //services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
+
+            services.AddTransient<IPollRepository, PollRepository>();
+            services.AddTransient<PollHandler, PollHandler>();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -32,6 +42,10 @@ namespace PollContext.webapi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
 
             app.UseAuthorization();
 
