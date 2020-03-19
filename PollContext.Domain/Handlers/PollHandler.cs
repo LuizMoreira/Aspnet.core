@@ -1,12 +1,12 @@
 ﻿using Flunt.Notifications;
-using PollContext.Domain.Commands;
+using PollContext.Domain.Commands.PollCommands.Input;
+using PollContext.Domain.Commands.PollCommands.Output;
 using PollContext.Domain.Entities;
 using PollContext.Domain.Repositories;
 using PollContext.Domain.ValueObjects;
 using PollContext.Shared.Commands;
 using PollContext.Shared.Commands.Contracts;
 using PollContext.Shared.Handlers.Contracts;
-using System;
 
 namespace PollContext.Domain.Handlers
 {
@@ -38,8 +38,7 @@ namespace PollContext.Domain.Handlers
 
             _pollRepository.Create(poll);
 
-            //TODO: retornar o obj DTO para evitar retornar nossa entity0
-            return new GenericCommandResult(true, "Enquete salva com sucesso", poll);
+            return new CreatePollCommandResult(poll.Id);
         }
 
         /// <summary>
@@ -62,8 +61,16 @@ namespace PollContext.Domain.Handlers
             // salva a alteração feita na views
             _pollRepository.Update(poll);
 
-            //TODO: retornar o obj DTO para evitar retornar nossa entity0
-            return new GenericCommandResult(true, "Enquete salva com sucesso", poll);
+            GetPollByIdCommandResult getPollByIdCommandResult = new GetPollByIdCommandResult(poll.Id, poll.Description.Description);
+            foreach (var item in poll.OptionsPoll)
+            {
+                GetOptionsPollByPolIdCommandResult optResult = new GetOptionsPollByPolIdCommandResult();
+                optResult.Option_id = item.Id;
+                optResult.option_description = item.Description.Description;
+                getPollByIdCommandResult.options.Add(optResult);
+            }
+
+            return getPollByIdCommandResult;
         }
 
     }

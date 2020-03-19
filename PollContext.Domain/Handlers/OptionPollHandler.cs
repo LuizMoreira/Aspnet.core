@@ -1,12 +1,9 @@
 ﻿using Flunt.Notifications;
-using PollContext.Domain.Commands;
-using PollContext.Domain.Entities;
+using PollContext.Domain.Commands.OptionPollCommands.Input;
 using PollContext.Domain.Repositories;
-using PollContext.Domain.ValueObjects;
 using PollContext.Shared.Commands;
 using PollContext.Shared.Commands.Contracts;
 using PollContext.Shared.Handlers.Contracts;
-using System;
 
 namespace PollContext.Domain.Handlers
 {

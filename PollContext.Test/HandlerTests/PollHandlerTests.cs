@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PollContext.Domain.Commands;
+using PollContext.Domain.Commands.PollCommands.Input;
 using PollContext.Domain.Entities;
 using PollContext.Domain.Handlers;
 using PollContext.Domain.ValueObjects;

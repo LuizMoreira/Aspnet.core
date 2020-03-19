@@ -3,7 +3,7 @@ using Flunt.Validations;
 using PollContext.Shared.Commands.Contracts;
 using System.Collections.Generic;
 
-namespace PollContext.Domain.Commands
+namespace PollContext.Domain.Commands.PollCommands.Input
 {
     public class CreatePollCommand : Notifiable, ICommand
     {

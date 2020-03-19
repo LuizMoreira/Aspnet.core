@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PollContext.Domain.Commands;
-using System;
+using PollContext.Domain.Commands.PollCommands.Input;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PollContext.Test.CommandsTests
 {

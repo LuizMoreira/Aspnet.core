@@ -48,6 +48,8 @@ namespace PollContext.webapi
                .AllowAnyHeader());
 
             app.UseAuthorization();
+            app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

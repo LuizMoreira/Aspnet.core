@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PollContext.Domain.Commands.PollCommands.Output;
 using PollContext.Domain.Entities;
 using PollContext.Domain.Queries;
 using PollContext.Domain.Repositories;
@@ -23,11 +24,11 @@ namespace PollContext.Infra.Repositories
             _context.SaveChanges();
         }
 
+      
         public Poll GetById(Guid id)
         {
             return _context.Polls.Where(PollQueries.GetById(id)).Include(p => p.OptionsPoll).FirstOrDefault();
         }
-
 
         public void Update(Poll poll)
         {

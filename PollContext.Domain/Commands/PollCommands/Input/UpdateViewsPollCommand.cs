@@ -4,7 +4,7 @@ using PollContext.Shared.Commands.Contracts;
 using System;
 using System.Collections.Generic;
 
-namespace PollContext.Domain.Commands
+namespace PollContext.Domain.Commands.PollCommands.Input
 {
     public class UpdateViewsPollCommand : Notifiable, ICommand
     {

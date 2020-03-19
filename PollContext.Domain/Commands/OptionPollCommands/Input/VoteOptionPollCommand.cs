@@ -4,7 +4,7 @@ using PollContext.Shared.Commands.Contracts;
 using System;
 using System.Collections.Generic;
 
-namespace PollContext.Domain.Commands
+namespace PollContext.Domain.Commands.OptionPollCommands.Input
 {
     public class VoteOptionPollCommand : Notifiable, ICommand
     {
@@ -15,9 +15,8 @@ namespace PollContext.Domain.Commands
         }
 
 
-        public VoteOptionPollCommand(Guid poll_Id, Guid option_Id)
+        public VoteOptionPollCommand(Guid option_Id)
         {
-            Poll_Id = poll_Id;
             Option_Id = option_Id;
         }
 
