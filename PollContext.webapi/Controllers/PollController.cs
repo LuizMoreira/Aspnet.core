@@ -2,6 +2,7 @@
 using PollContext.Domain.Commands;
 using PollContext.Domain.Commands.OptionPollCommands.Input;
 using PollContext.Domain.Commands.PollCommands.Input;
+using PollContext.Domain.Commands.PollCommands.Output;
 using PollContext.Domain.Entities;
 using PollContext.Domain.Handlers;
 using PollContext.Domain.Repositories;
@@ -25,10 +26,12 @@ namespace PollContext.webapi.Controllers
         }
 
         [HttpGet("{id}")]
-        public Poll Get(string id, [FromServices] IPollRepository repository)
+        public GenericCommandResult Get(Guid id, [FromServices] PollHandler handler)
         {
-
-            return repository.GetById(Guid.Parse(id));
+            if (id == null) return new GenericCommandResult(false, "Identificador obrigatório", null);
+            UpdateViewsPollCommand command = new UpdateViewsPollCommand(id);
+            var ret = (GetPollByIdCommandResult)handler.Handle(command);
+            return new GenericCommandResult(true, "Sucesso", ret);
            
         }
 

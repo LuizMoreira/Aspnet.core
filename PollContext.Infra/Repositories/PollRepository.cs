@@ -27,7 +27,7 @@ namespace PollContext.Infra.Repositories
       
         public Poll GetById(Guid id)
         {
-            return _context.Polls.Where(PollQueries.GetById(id)).Include(p => p.OptionsPoll).FirstOrDefault();
+            return _context.Polls.Where(PollQueries.GetById(id)).FirstOrDefault();//.Include(p => p.OptionsPoll).FirstOrDefault();
         }
 
         public void Update(Poll poll)

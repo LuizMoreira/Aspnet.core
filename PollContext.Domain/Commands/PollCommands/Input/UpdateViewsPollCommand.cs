@@ -14,10 +14,9 @@ namespace PollContext.Domain.Commands.PollCommands.Input
 
         }
 
-        public UpdateViewsPollCommand(Guid poll_Id, int views)
+        public UpdateViewsPollCommand(Guid poll_Id)
         {
             Poll_Id = poll_Id;
-            Views = views;
         }
 
         public Guid Poll_Id { get; set; }

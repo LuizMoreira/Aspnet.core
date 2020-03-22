@@ -1,5 +1,6 @@
 ﻿using Flunt.Validations;
 using PollContext.Shared.ValueObjects;
+using System.Collections.Generic;
 
 namespace PollContext.Domain.ValueObjects
 {
@@ -18,6 +19,10 @@ namespace PollContext.Domain.ValueObjects
 
         }
 
+        protected override IEnumerable<object> GetAtomicValues()
+        {
+            yield return Description;
+        }
         public string Description { get; private set; }
     }
 }

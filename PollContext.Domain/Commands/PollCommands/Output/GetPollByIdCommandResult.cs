@@ -20,5 +20,7 @@ namespace PollContext.Domain.Commands.PollCommands.Output
         public string poll_description { get; set; }
 
         public List<GetOptionsPollByPolIdCommandResult> options { get; set; }
+
+
     }
 }

@@ -21,7 +21,8 @@ namespace PollContext.Domain.Entities
         public int Views { get; private set; }
 
         //Impossibilita que seja adicionado o optionPoll diretamente --> Poll.OptionsPoll.add(Option)
-        public IReadOnlyCollection<OptionPoll> OptionsPoll { get { return _optionsPoll.ToArray(); } }
+        //public IReadOnlyCollection<OptionPoll> OptionsPoll { get { return _optionsPoll.ToArray(); } }
+        public IReadOnlyCollection<OptionPoll> OptionsPoll => _optionsPoll.ToArray();
 
         public void addOptions(OptionPoll option)
         {
