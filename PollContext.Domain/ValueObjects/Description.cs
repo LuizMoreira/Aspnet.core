@@ -12,12 +12,12 @@ namespace PollContext.Domain.ValueObjects
         {
             Description = description;
 
-            //AddNotifications(
-            //    new Contract()
-            //    .Requires()
-            //    .IsNotNullOrEmpty(Description, "DescriptionVO.Description", "Descrição é obrigatória")
-            //    .HasMinLen(Description, 3, "DescriptionVO.Description", "Descrição deve conter ao menos 3 caracteres.")
-            //    .HasMaxLen(Description, 150, "DescriptionVO.Description", "Descrição não pode ter mais do que 150 caracteres."));
+            AddNotifications(
+                new Contract()
+                .Requires()
+                .IsNotNullOrEmpty(Description, "DescriptionVO.Description", "Descrição é obrigatória")
+                .HasMinLen(Description, 3, "DescriptionVO.Description", "Descrição deve conter ao menos 3 caracteres.")
+                .HasMaxLen(Description, 150, "DescriptionVO.Description", "Descrição não pode ter mais do que 150 caracteres."));
 
         }
 

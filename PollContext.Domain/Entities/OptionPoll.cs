@@ -11,16 +11,16 @@ namespace PollContext.Domain.Entities
            
         }
 
-        public OptionPoll(string description)
+        public OptionPoll(DescriptionVO description)
         {
             Description = description;
             //caso tenha erro de description na classe descriptionVO, ele é adicionado aqui. 
-            //AddNotifications(description);
+            AddNotifications(description);
 
         }
 
         //set private evita manipulação fora da criação da classe; caso seja necessário alterar, vms criar um método de alterar a propriedade
-        public string Description { get; private set; }
+        public DescriptionVO Description { get; private set; }
 
         public Guid Poll_Id { get; private set; }
 

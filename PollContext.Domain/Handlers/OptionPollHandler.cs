@@ -26,6 +26,8 @@ namespace PollContext.Domain.Handlers
             //obtem a enquete por id e poll id
             var optionPoll = _optionPollRepository.GetOptionPollById(command.Option_Id, command.Poll_Id);
 
+            if (optionPoll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
+
             //incrementa a qty
             optionPoll.increaseQty();
 

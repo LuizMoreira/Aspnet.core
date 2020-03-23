@@ -6,31 +6,27 @@ using System.Collections.Generic;
 
 namespace PollContext.Domain.Commands.PollCommands.Input
 {
-    public class UpdateViewsPollCommand : Notifiable, ICommand
+    public class GetPollByIdCommand : Notifiable, ICommand
     {
 
-        public UpdateViewsPollCommand()
+        public GetPollByIdCommand()
         {
 
         }
 
-        public UpdateViewsPollCommand(Guid poll_Id)
+        public GetPollByIdCommand(Guid poll_Id)
         {
             Poll_Id = poll_Id;
         }
 
         public Guid Poll_Id { get; set; }
 
-        public int Views { get; set; }
-
-
         public void Validate()
         {
             AddNotifications(
                            new Contract()
                            .Requires()
-                           .IsNotNull(Poll_Id, "VoteOptionPollCommand.Poll_Id", "Identificação da enquete é obrigatória")
-                           .IsGreaterOrEqualsThan(Views, 0, "UpdateViewsPollCommand.Views", "A quantidade de views não pode ser negativa"));
+                           .IsNotNull(Poll_Id, "VoteOptionPollCommand.Poll_Id", "Identificação da enquete é obrigatória"));
 
                     }
     }

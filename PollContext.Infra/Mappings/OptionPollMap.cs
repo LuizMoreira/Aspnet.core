@@ -13,6 +13,7 @@ namespace PollContext.Infra.Mappings
                 .HasKey(x => x.Id);
 
             builder
+                .OwnsOne(x => x.Description)
                 .Property(x => x.Description)
                 .HasColumnName("Description");
 

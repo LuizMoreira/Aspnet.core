@@ -13,16 +13,16 @@ namespace PollContext.Domain.Entities
 
         }
 
-        public Poll(string description)
+        public Poll(DescriptionVO description)
         {
             Description = description;
             _optionsPoll = new List<OptionPoll>();
             //caso tenha erro de description na classe descriptionVO, ele é adicionado aqui. 
-            //AddNotifications(description);
+            AddNotifications(description);
 
         }
 
-        public string Description { get; private set; }
+        public DescriptionVO Description { get; private set; }
 
         public int Views { get; private set; }
 

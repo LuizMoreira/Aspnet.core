@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace PollContext.Domain.Handlers
 {
-    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<UpdateViewsPollCommand>
+    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<GetPollByIdCommand>, IHandler<GetPollStatsByIdCommand>
     {
         private readonly IPollRepository _pollRepository;
 
@@ -28,27 +28,22 @@ namespace PollContext.Domain.Handlers
                 return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
             
             DescriptionVO description = new DescriptionVO(command.Poll_Description);
-            Poll poll = new Poll(command.Poll_Description);
+            Poll poll = new Poll(description);
 
             List<OptionPoll> opt = new List<OptionPoll>();
             foreach (var item in command.Options)
             {
                 DescriptionVO vo = new DescriptionVO(item);
-                OptionPoll option = new OptionPoll(item);
+                OptionPoll option = new OptionPoll(vo);
                 poll.addOptions(option);
             }
 
             _pollRepository.Create(poll);
 
-            return new CreatePollCommandResult(poll.Id);
+            return new GenericCommandResult(true, "Enquete gravada com sucesso", new CreatePollCommandResult(poll.Id));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public ICommandResult Handle(UpdateViewsPollCommand command)
+        public ICommandResult Handle(GetPollByIdCommand command)
         {
             command.Validate();
             if (command.Invalid)
@@ -57,22 +52,40 @@ namespace PollContext.Domain.Handlers
             //obtem a enquete por id
             var poll = _pollRepository.GetById(command.Poll_Id);
             
+            if(poll==null) return new GenericCommandResult(false, "Enquete não encontrada", null);
             //incrementa a visualização
             poll.increaseView();
 
             // salva a alteração feita na views
             _pollRepository.Update(poll);
 
-            GetPollByIdCommandResult getPollByIdCommandResult = new GetPollByIdCommandResult(poll.Id, poll.Description);
+            GetPollByIdCommandResult getPollByIdCommandResult = new GetPollByIdCommandResult(poll.Id, poll.Description.Description);
             foreach (var item in poll.OptionsPoll)
             {
-                GetOptionsPollByPolIdCommandResult optResult = new GetOptionsPollByPolIdCommandResult();
-                optResult.Option_id = item.Id;
-                optResult.option_description = item.Description;
-                getPollByIdCommandResult.options.Add(optResult);
+                getPollByIdCommandResult.options.Add(new GetOptionsPollByPolIdCommandResult(item.Id, item.Description.Description));
             }
 
-            return getPollByIdCommandResult;
+            return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollByIdCommandResult);
+        }
+
+        public ICommandResult Handle(GetPollStatsByIdCommand command)
+        {
+            command.Validate();
+            if (command.Invalid)
+                return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+
+            //obtem a enquete por id
+            var poll = _pollRepository.GetById(command.Poll_Id);
+
+            if (poll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
+
+            GetPollStatsByIdCommandResult getPollStatsByIdCommandResult = new GetPollStatsByIdCommandResult(poll.Id, poll.Views);
+            foreach (var item in poll.OptionsPoll)
+            {
+                getPollStatsByIdCommandResult.options.Add(new GetOptionsPollStatsByPolIdCommandResult(item.Id, item.Qty));
+            }
+
+            return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollStatsByIdCommandResult);
         }
 
     }

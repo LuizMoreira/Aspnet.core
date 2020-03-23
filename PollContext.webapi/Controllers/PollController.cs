@@ -29,23 +29,24 @@ namespace PollContext.webapi.Controllers
         public GenericCommandResult Get(Guid id, [FromServices] PollHandler handler)
         {
             if (id == null) return new GenericCommandResult(false, "Identificador obrigatório", null);
-            UpdateViewsPollCommand command = new UpdateViewsPollCommand(id);
-            var ret = (GetPollByIdCommandResult)handler.Handle(command);
-            return new GenericCommandResult(true, "Sucesso", ret);
+            GetPollByIdCommand command = new GetPollByIdCommand(id);
+            return (GenericCommandResult) handler.Handle(command);
            
         }
 
         [HttpPost("{id}/vote")]
         public GenericCommandResult Post(string id, [FromBody] VoteOptionPollCommand command, [FromServices] OptionPollHandler handler)
         {
+            if (id == null) return new GenericCommandResult(false, "Identificador obrigatório", null);
             command.Poll_Id = Guid.Parse(id);
             return (GenericCommandResult)handler.Handle(command);
         }
 
         [HttpGet("{id}/stats")]
-        public Poll GetStats(string id, [FromServices] IPollRepository repository)
+        public GenericCommandResult GetStats(Guid id, [FromServices] PollHandler handler)
         {
-            return repository.GetById(Guid.Parse(id));
+            if (id == null) return new GenericCommandResult(false, "Identificador obrigatório", null);
+            return (GenericCommandResult)handler.Handle(new GetPollStatsByIdCommand(id));
         }
     }
 }

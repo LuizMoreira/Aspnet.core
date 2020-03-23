@@ -28,7 +28,9 @@ namespace PollContext.webapi
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
 
             services.AddTransient<IPollRepository, PollRepository>();
+            services.AddTransient<IOptionPollRepository, OptionPollRepository>();
             services.AddTransient<PollHandler, PollHandler>();
+            services.AddTransient<OptionPollHandler, OptionPollHandler>();
 
         }
 
