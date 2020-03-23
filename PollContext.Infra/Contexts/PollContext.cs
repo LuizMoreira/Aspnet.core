@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Flunt.Notifications;
+using Microsoft.EntityFrameworkCore;
 using PollContext.Domain.Entities;
 using PollContext.Infra.Mappings;
 
@@ -18,7 +19,7 @@ namespace PollContext.Infra.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Ignore<Notification>();
             modelBuilder.ApplyConfiguration(new PollMap());
             modelBuilder.ApplyConfiguration(new OptionPollMap());
 

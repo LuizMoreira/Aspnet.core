@@ -8,10 +8,13 @@ namespace PollContext.Infra.Mappings
     {
         public void Configure(EntityTypeBuilder<OptionPoll> builder)
         {
-            builder.Property(c => c.Id)
-                .HasColumnName("Id");
+            //builder.Property(c => c.Id)
+            //    .HasColumnName("Id");
 
-            builder.OwnsOne(x => x.Description)
+            builder.HasKey(x => x.Id);
+
+
+            builder
                 .Property(x => x.Description)
                 .HasColumnName("Description");
 

@@ -7,6 +7,7 @@ using PollContext.Domain.ValueObjects;
 using PollContext.Shared.Commands;
 using PollContext.Shared.Commands.Contracts;
 using PollContext.Shared.Handlers.Contracts;
+using System.Collections.Generic;
 
 namespace PollContext.Domain.Handlers
 {
@@ -27,12 +28,13 @@ namespace PollContext.Domain.Handlers
                 return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
             
             DescriptionVO description = new DescriptionVO(command.Poll_Description);
-            Poll poll = new Poll(description);
-            
+            Poll poll = new Poll(command.Poll_Description);
+
+            List<OptionPoll> opt = new List<OptionPoll>();
             foreach (var item in command.Options)
             {
                 DescriptionVO vo = new DescriptionVO(item);
-                OptionPoll option = new OptionPoll(vo);
+                OptionPoll option = new OptionPoll(item);
                 poll.addOptions(option);
             }
 
@@ -61,12 +63,12 @@ namespace PollContext.Domain.Handlers
             // salva a alteração feita na views
             _pollRepository.Update(poll);
 
-            GetPollByIdCommandResult getPollByIdCommandResult = new GetPollByIdCommandResult(poll.Id, poll.Description.Description);
+            GetPollByIdCommandResult getPollByIdCommandResult = new GetPollByIdCommandResult(poll.Id, poll.Description);
             foreach (var item in poll.OptionsPoll)
             {
                 GetOptionsPollByPolIdCommandResult optResult = new GetOptionsPollByPolIdCommandResult();
                 optResult.Option_id = item.Id;
-                optResult.option_description = item.Description.Description;
+                optResult.option_description = item.Description;
                 getPollByIdCommandResult.options.Add(optResult);
             }
 
