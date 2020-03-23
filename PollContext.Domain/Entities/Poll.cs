@@ -7,7 +7,6 @@ namespace PollContext.Domain.Entities
 {
     public class Poll : Entity
     {
-        protected IList<OptionPoll> _optionsPoll;
 
         public Poll()
         {
@@ -17,22 +16,25 @@ namespace PollContext.Domain.Entities
         public Poll(string description)
         {
             Description = description;
-            OptionsPoll = new List<OptionPoll>();
+            _optionsPoll = new List<OptionPoll>();
             //caso tenha erro de description na classe descriptionVO, ele é adicionado aqui. 
             //AddNotifications(description);
 
         }
 
         public string Description { get; private set; }
+
         public int Views { get; private set; }
 
+        private readonly List<OptionPoll> _optionsPoll;
+
         //Impossibilita que seja adicionado o optionPoll diretamente --> Poll.OptionsPoll.add(Option)
-        public IList<OptionPoll> OptionsPoll { get; private set;}
-        //public IReadOnlyCollection<OptionPoll> OptionsPoll => _optionsPoll.ToArray();
+        //public IList<OptionPoll> OptionsPoll { get; private set;}
+        public IReadOnlyCollection<OptionPoll> OptionsPoll => _optionsPoll;
 
         public void addOptions(OptionPoll option)
         {
-            OptionsPoll.Add(option);
+            _optionsPoll.Add(option);
         }
 
         public void increaseView()
