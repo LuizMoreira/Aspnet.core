@@ -14,7 +14,7 @@ namespace PollContext.Domain.Handlers
     public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<GetPollByIdCommand>, IHandler<GetPollStatsByIdCommand>
     {
         private readonly IPollRepository _pollRepository;
-
+        
         public PollHandler(IPollRepository pollRepository)
         {
             _pollRepository = pollRepository;

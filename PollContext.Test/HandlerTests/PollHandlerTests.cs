@@ -7,6 +7,8 @@ using PollContext.Shared.Commands;
 using PollContext.Test.Repositories;
 using System.Collections.Generic;
 
+using System;
+
 namespace PollContext.Test.HandlerTests
 {
 
@@ -16,7 +18,9 @@ namespace PollContext.Test.HandlerTests
 
         private readonly CreatePollCommand _createPollCommandValid;
         private readonly CreatePollCommand _createPollCommandInvalid;
-        private readonly PollHandler _handler;
+        private readonly GetPollByIdCommand _getPollByIdCommandValid;
+        private readonly GetPollByIdCommand _getPollByIdCommandInvalid;
+        
         private List<Poll> _polls;
 
         public PollHandlerTests()
@@ -53,11 +57,16 @@ namespace PollContext.Test.HandlerTests
             _polls.Add(poll1);
             _polls.Add(poll2);
 
-            _handler = new PollHandler(new FakePollRepository());
+
+
+            _getPollByIdCommandValid = new GetPollByIdCommand(Guid.NewGuid());
+            _getPollByIdCommandInvalid = new GetPollByIdCommand();
+            
+
+
+
 
             //ACT
-            _createPollCommandValid.Validate();
-            _createPollCommandInvalid.Validate();
 
         }
 
@@ -66,27 +75,57 @@ namespace PollContext.Test.HandlerTests
         public void ShouldReturnGenericCommandResultSucessTrueWhenCreatePollCommandIsValid()
         {
 
+            PollHandler _handler = new PollHandler(new FakePollRepository());
             var result = (GenericCommandResult)_handler.Handle(_createPollCommandValid);
 
             Assert.IsTrue(_createPollCommandValid.Valid);
             Assert.AreEqual(true, result.Success);
-            
+
         }
 
         [TestMethod]
-        public void ShouldReturnGenericCommandResultSucessFalseWhenUpdateViewsPollCommandIsValid()
+        public void ShouldReturnGenericCommandResultSucessTrueWhenCreatePollCommandIsInvalid()
         {
+            PollHandler _handler = new PollHandler(new FakePollRepository());
             var result = (GenericCommandResult)_handler.Handle(_createPollCommandInvalid);
 
             Assert.IsFalse(_createPollCommandInvalid.Valid);
             Assert.AreEqual(false, result.Success);
         }
 
-        public void ShouldReturnGenericCommandResultSucessTrueWhenCommandIsValid()
+
+
+        [TestMethod]
+        public void ShouldReturnGenericCommandResultSucessTrueWhenGetPollByIdCommandIsValid()
         {
+         PollHandler _handler = new PollHandler(new FakePollRepository());
+        var result = (GenericCommandResult)_handler.Handle(_getPollByIdCommandValid);
 
-            Assert.Fail();
-
+            Assert.IsTrue(_getPollByIdCommandValid.Valid);
+            Assert.AreEqual(true, result.Success);
         }
+
+        [TestMethod]
+        public void ShouldReturnGenericCommandResultSucessTrueWhenGetPollByIdCommandIsInvalid()
+        {
+            PollHandler _handler = new PollHandler(new FakePollRepository());
+            var result = (GenericCommandResult)_handler.Handle(_getPollByIdCommandInvalid);
+
+            Assert.IsFalse(_getPollByIdCommandInvalid.Valid);
+            Assert.AreEqual(false, result.Success);
+        }
+
+        [TestMethod]
+        public void ShouldReturnGenericCommandResultSucessTrueGetPollByIdCommandResultWhenGetPollByIdCommandIsValid()
+        {
+            PollHandler _handler = new PollHandler(new FakePollRepository());
+            var result = (GenericCommandResult)_handler.Handle(_getPollByIdCommandValid);
+
+            Assert.IsTrue(_getPollByIdCommandValid.Valid);
+            Assert.AreEqual(true, result.Success);
+            Assert.IsNotNull(result);
+            //Assert.AreEqual(_getPollByIdCommandValid.Poll_Id, result.Data.id)
+        }
+
     }
 }
