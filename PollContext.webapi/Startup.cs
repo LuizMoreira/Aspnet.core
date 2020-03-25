@@ -24,8 +24,8 @@ namespace PollContext.webapi
         {
             services.AddControllers();
             
-            //services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
-            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
 
             services.AddTransient<IPollRepository, PollRepository>();
             services.AddTransient<IOptionPollRepository, OptionPollRepository>();
