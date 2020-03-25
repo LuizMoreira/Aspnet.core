@@ -26,7 +26,7 @@ namespace PollContext.Domain.Commands.PollCommands.Input
             AddNotifications(
                            new Contract()
                            .Requires()
-                           .IsNotNull(Poll_Id, "VoteOptionPollCommand.Poll_Id", "Identificação da enquete é obrigatória"));
+                           .IsNotEmpty(Poll_Id, "Poll_Id", "Identificador é obrigatório"));
 
                     }
     }
