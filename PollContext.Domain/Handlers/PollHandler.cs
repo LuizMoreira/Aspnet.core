@@ -46,9 +46,9 @@ namespace PollContext.Domain.Handlers
 
                 return new GenericCommandResult(true, "Enquete gravada com sucesso", new CreatePollCommandResult(poll.Id));
             }
-            catch (Exception ex)
+            catch 
             {
-                return new GenericCommandResult(false, "Falha ao gravar enquete", ex);
+                return new GenericCommandResult(false, "Falha ao gravar enquete", null);
             }
         }
 
@@ -78,9 +78,9 @@ namespace PollContext.Domain.Handlers
 
                 return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollByIdCommandResult);
             }
-            catch (Exception ex)
+            catch 
             {
-                return new GenericCommandResult(false, "Falha ao obter enquete", ex);
+                return new GenericCommandResult(false, "Falha ao obter enquete", null);
             }
 
         }
@@ -105,9 +105,9 @@ namespace PollContext.Domain.Handlers
 
                 return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollStatsByIdCommandResult);
             }
-            catch (Exception ex)
+            catch
             {
-                return new GenericCommandResult(false, "Falha ao obter a estatística de uma enquete", ex);
+                return new GenericCommandResult(false, "Falha ao obter a estatística de uma enquete", null);
             }
         }
 
