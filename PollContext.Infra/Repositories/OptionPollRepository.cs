@@ -26,8 +26,15 @@ namespace PollContext.Infra.Repositories
 
         public void Update(OptionPoll optionPoll)
         {
-            _context.Entry(optionPoll).State = EntityState.Modified;
-            _context.SaveChanges();
+            try
+            {
+                _context.Entry(optionPoll).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -25,12 +25,12 @@ namespace PollContext.Domain.Handlers
             {
                 command.Validate();
                 if (command.Invalid)
-                    return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+                    return new GenericCommandResult(true, "Enquete inválida", command.Notifications);
 
-                //obtem a enquete por id e poll id
+                //obtem a resposta de uma enquete por id e poll id
                 var optionPoll = await _optionPollRepository.GetOptionPollById(command.Option_Id, command.Poll_Id);
 
-                if (optionPoll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
+                if (optionPoll == null) return new GenericCommandResult(true, "Enquete não encontrada", null);
 
                 //incrementa a qty
                 optionPoll.increaseQty();

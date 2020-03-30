@@ -32,8 +32,16 @@ namespace PollContext.Infra.Repositories
 
         public Task Update(Poll poll)
         {
-            _context.Entry(poll).State = EntityState.Modified;
-            return _context.SaveChangesAsync();
+            try
+            {
+                _context.Entry(poll).State = EntityState.Modified;
+                return _context.SaveChangesAsync();
+
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw ex;
+            }
         }
     }
 }

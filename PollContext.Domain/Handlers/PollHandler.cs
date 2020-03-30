@@ -29,7 +29,7 @@ namespace PollContext.Domain.Handlers
                 // fail fast validation
                 command.Validate();
                 if (command.Invalid)
-                    return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+                    return new GenericCommandResult(true, "Enquete inválida", command.Notifications);
 
                 DescriptionVO description = new DescriptionVO(command.Poll_Description);
                 Poll poll = new Poll(description);
@@ -58,12 +58,12 @@ namespace PollContext.Domain.Handlers
             {
                 command.Validate();
                 if (command.Invalid)
-                    return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+                    return new GenericCommandResult(true, "Enquete inválida", command.Notifications);
 
                 //obtem a enquete por id
                 var poll = await _pollRepository.GetById(command.Poll_Id);
 
-                if (poll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
+                if (poll == null) return new GenericCommandResult(true, "Enquete não encontrada", null);
                 //incrementa a visualização
                 poll.increaseView();
 
@@ -91,12 +91,11 @@ namespace PollContext.Domain.Handlers
             {
                 command.Validate();
                 if (command.Invalid)
-                    return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+                    return new GenericCommandResult(true, "Enquete inválida", command.Notifications);
 
-                //obtem a enquete por id
                 var poll = await _pollRepository.GetById(command.Poll_Id);
 
-                if (poll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
+                if (poll == null) return new GenericCommandResult(true, "Enquete não encontrada", null);
 
                 GetPollStatsByIdCommandResult getPollStatsByIdCommandResult = new GetPollStatsByIdCommandResult(poll.Id, poll.Views);
                 foreach (var item in poll.OptionsPoll)
