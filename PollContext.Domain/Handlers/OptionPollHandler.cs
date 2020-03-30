@@ -4,6 +4,7 @@ using PollContext.Domain.Repositories;
 using PollContext.Shared.Commands;
 using PollContext.Shared.Commands.Contracts;
 using PollContext.Shared.Handlers.Contracts;
+using System;
 using System.Threading.Tasks;
 
 namespace PollContext.Domain.Handlers
@@ -20,23 +21,30 @@ namespace PollContext.Domain.Handlers
 
         public async Task<ICommandResult> Handle(VoteOptionPollCommand command)
         {
-            command.Validate();
-            if (command.Invalid)
-                return new  GenericCommandResult(false, "Enquete inválida", command.Notifications);
+            try
+            {
+                command.Validate();
+                if (command.Invalid)
+                    return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
 
-            //obtem a enquete por id e poll id
-            var optionPoll = await _optionPollRepository.GetOptionPollById(command.Option_Id, command.Poll_Id);
+                //obtem a enquete por id e poll id
+                var optionPoll = await _optionPollRepository.GetOptionPollById(command.Option_Id, command.Poll_Id);
 
-            if (optionPoll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
+                if (optionPoll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
 
-            //incrementa a qty
-            optionPoll.increaseQty();
+                //incrementa a qty
+                optionPoll.increaseQty();
 
-            // salva a alteração feita na qtd
-            _optionPollRepository.Update(optionPoll);
+                // salva a alteração feita na qtd
+                _optionPollRepository.Update(optionPoll);
 
-            //TODO: retornar o obj DTO para evitar retornar nossa entity
-            return new GenericCommandResult(true, "Enquete salva com sucesso", null);
+                //TODO: retornar o obj DTO para evitar retornar nossa entity
+                return new GenericCommandResult(true, "Enquete salva com sucesso", null);
+            }
+            catch (Exception ex)
+            {
+                return new GenericCommandResult(false, "Falha ao votar em uma enquete", ex);
+            }
         }
     }
 }
