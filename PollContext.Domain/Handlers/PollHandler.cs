@@ -8,6 +8,7 @@ using PollContext.Shared.Commands;
 using PollContext.Shared.Commands.Contracts;
 using PollContext.Shared.Handlers.Contracts;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PollContext.Domain.Handlers
 {
@@ -20,7 +21,7 @@ namespace PollContext.Domain.Handlers
             _pollRepository = pollRepository;
         }
 
-        public ICommandResult Handle(CreatePollCommand command)
+        public async Task<ICommandResult> Handle(CreatePollCommand command)
         {
             // fail fast validation
             command.Validate();
@@ -38,26 +39,26 @@ namespace PollContext.Domain.Handlers
                 poll.addOptions(option);
             }
 
-            _pollRepository.Create(poll);
+            await _pollRepository.Create(poll);
 
             return new GenericCommandResult(true, "Enquete gravada com sucesso", new CreatePollCommandResult(poll.Id));
         }
 
-        public ICommandResult Handle(GetPollByIdCommand command)
+        public async Task<ICommandResult> Handle(GetPollByIdCommand command)
         {
             command.Validate();
             if (command.Invalid)
                 return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
 
             //obtem a enquete por id
-            var poll = _pollRepository.GetById(command.Poll_Id);
+            var poll = await _pollRepository.GetById(command.Poll_Id);
             
             if(poll==null) return new GenericCommandResult(false, "Enquete não encontrada", null);
             //incrementa a visualização
             poll.increaseView();
 
             // salva a alteração feita na views
-            _pollRepository.Update(poll);
+            await _pollRepository.Update(poll);
 
             GetPollByIdCommandResult getPollByIdCommandResult = new GetPollByIdCommandResult(poll.Id, poll.Description.Description);
             foreach (var item in poll.OptionsPoll)
@@ -68,14 +69,14 @@ namespace PollContext.Domain.Handlers
             return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollByIdCommandResult);
         }
 
-        public ICommandResult Handle(GetPollStatsByIdCommand command)
+        public async Task<ICommandResult> Handle(GetPollStatsByIdCommand command)
         {
             command.Validate();
             if (command.Invalid)
                 return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
 
             //obtem a enquete por id
-            var poll = _pollRepository.GetById(command.Poll_Id);
+            var poll = await _pollRepository.GetById(command.Poll_Id);
 
             if (poll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
 

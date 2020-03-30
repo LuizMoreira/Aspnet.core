@@ -2,16 +2,17 @@
 using PollContext.Domain.Entities;
 using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace PollContext.Domain.Repositories
 {
     public interface IPollRepository
     {
-        void Create(Poll poll);
+        Task Create(Poll poll);
         
-        void Update(Poll poll);
-        
-        Poll GetById(Guid id);
+        Task Update(Poll poll);
+
+        Task<Poll> GetById(Guid id);
 
     }
 }

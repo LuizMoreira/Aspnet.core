@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PollContext.Domain.Commands.PollCommands.Output;
 using PollContext.Domain.Entities;
 using PollContext.Domain.Queries;
 using PollContext.Domain.Repositories;
 using PollContext.Infra.Contexts;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PollContext.Infra.Repositories
 {
@@ -18,22 +18,22 @@ namespace PollContext.Infra.Repositories
             _context = dataContext;
         }
 
-        public void Create(Poll poll)
+        public async Task Create(Poll poll)
         {
-            _context.Polls.Add(poll);
-            _context.SaveChanges();
+            await _context.Polls.AddAsync(poll);
+            await _context.SaveChangesAsync();
         }
 
       
-        public Poll GetById(Guid id)
+        public async Task<Poll> GetById(Guid id)
         {
-            return _context.Polls.Where(PollQueries.GetById(id)).Include(p => p.OptionsPoll).FirstOrDefault();
+            return await _context.Polls.Where(PollQueries.GetById(id)).Include(p => p.OptionsPoll).FirstOrDefaultAsync();
         }
 
-        public void Update(Poll poll)
+        public Task Update(Poll poll)
         {
             _context.Entry(poll).State = EntityState.Modified;
-            _context.SaveChanges();
+            return _context.SaveChangesAsync();
         }
     }
 }

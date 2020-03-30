@@ -1,5 +1,6 @@
 ﻿using PollContext.Domain.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace PollContext.Domain.Repositories
 {
@@ -7,7 +8,7 @@ namespace PollContext.Domain.Repositories
     {
         void Update(OptionPoll optionPoll);
 
-        OptionPoll GetOptionPollById(Guid id, Guid poll_Id);
+        Task<OptionPoll> GetOptionPollById(Guid id, Guid poll_Id);
 
     }
 }

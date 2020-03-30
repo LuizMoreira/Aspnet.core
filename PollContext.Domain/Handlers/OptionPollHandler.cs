@@ -4,6 +4,7 @@ using PollContext.Domain.Repositories;
 using PollContext.Shared.Commands;
 using PollContext.Shared.Commands.Contracts;
 using PollContext.Shared.Handlers.Contracts;
+using System.Threading.Tasks;
 
 namespace PollContext.Domain.Handlers
 {
@@ -17,14 +18,14 @@ namespace PollContext.Domain.Handlers
         }
 
 
-        public ICommandResult Handle(VoteOptionPollCommand command)
+        public async Task<ICommandResult> Handle(VoteOptionPollCommand command)
         {
             command.Validate();
             if (command.Invalid)
-                return new GenericCommandResult(false, "Enquete inválida", command.Notifications);
+                return new  GenericCommandResult(false, "Enquete inválida", command.Notifications);
 
             //obtem a enquete por id e poll id
-            var optionPoll = _optionPollRepository.GetOptionPollById(command.Option_Id, command.Poll_Id);
+            var optionPoll = await _optionPollRepository.GetOptionPollById(command.Option_Id, command.Poll_Id);
 
             if (optionPoll == null) return new GenericCommandResult(false, "Enquete não encontrada", null);
 
@@ -35,7 +36,7 @@ namespace PollContext.Domain.Handlers
             _optionPollRepository.Update(optionPoll);
 
             //TODO: retornar o obj DTO para evitar retornar nossa entity
-            return new GenericCommandResult(true, "Enquete salva com sucesso", optionPoll);
+            return new GenericCommandResult(true, "Enquete salva com sucesso", null);
         }
     }
 }

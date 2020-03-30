@@ -10,7 +10,7 @@ using PollContext.Infra.Contexts;
 namespace PollContext.Infra.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200325122741_InitialCreate")]
+    [Migration("20200326140243_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

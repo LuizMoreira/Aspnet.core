@@ -1,43 +1,62 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PollContext.Domain.Commands.OptionPollCommands.Input;
 using PollContext.Domain.Commands.PollCommands.Input;
 using PollContext.Domain.Handlers;
 using PollContext.Shared.Commands;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PollContext.webapi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    //[Authorize]
     public class PollController : ControllerBase
     {
         [Route("")]
         [HttpPost]
-        public GenericCommandResult Post([FromBody] CreatePollCommand command, [FromServices] PollHandler handler)
+        public async Task<ActionResult<GenericCommandResult>> Post([FromBody] CreatePollCommand command, [FromServices] PollHandler handler)
         {
-            
-            return (GenericCommandResult)handler.Handle(command);
+            //var user = User.Claims.FirstOrDefault(x=>x.Type == "user_id")?.Value;
+            var ret = (GenericCommandResult)await handler.Handle(command);
+            if (!ret.Success)
+                BadRequest(ret);
+            return Ok(ret);
             
         }
-
-        [HttpGet("{id}")]
-        public GenericCommandResult Get(Guid id, [FromServices] PollHandler handler)
+        
+        //com restrição de rota
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult<GenericCommandResult>> Get(Guid id, [FromServices] PollHandler handler)
         {
-            return (GenericCommandResult) handler.Handle(new GetPollByIdCommand(id));
-           
+            var ret = (GenericCommandResult) await handler.Handle(new GetPollByIdCommand(id));
+            if (!ret.Success)
+                BadRequest(ret);
+            return Ok(ret);
+
         }
 
-        [HttpPost("{id}/vote")]
-        public GenericCommandResult Post(Guid id, [FromBody] VoteOptionPollCommand command, [FromServices] OptionPollHandler handler)
+        [HttpPost("{id:Guid}/vote")]
+        public async Task<ActionResult<GenericCommandResult>> Post(Guid id, [FromBody] VoteOptionPollCommand command, [FromServices] OptionPollHandler handler)
         {
             command.Poll_Id = id;
-            return (GenericCommandResult)handler.Handle(command);
+            var ret = (GenericCommandResult)await handler.Handle(command);
+            if (!ret.Success)
+                BadRequest(ret);
+            return Ok(ret);
+
         }
 
-        [HttpGet("{id}/stats")]
-        public GenericCommandResult GetStats(Guid id, [FromServices] PollHandler handler)
+        [HttpGet("{id:Guid}/stats")]
+        public async Task<ActionResult<GenericCommandResult>> GetStats(Guid id, [FromServices] PollHandler handler)
         {
-            return (GenericCommandResult)handler.Handle(new GetPollStatsByIdCommand(id));
+            var ret = (GenericCommandResult)await handler.Handle(new GetPollStatsByIdCommand(id));
+            if (!ret.Success)
+                BadRequest(ret);
+            return Ok(ret);
+
         }
     }
 }

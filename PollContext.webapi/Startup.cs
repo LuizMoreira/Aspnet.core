@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using PollContext.Domain.Handlers;
 using PollContext.Domain.Repositories;
 using PollContext.Infra.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace PollContext.webapi
 {
@@ -23,14 +25,35 @@ namespace PollContext.webapi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
-            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            var config = Configuration.GetConnectionString("connectionString");
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(config));
             //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
 
             services.AddTransient<IPollRepository, PollRepository>();
             services.AddTransient<IOptionPollRepository, OptionPollRepository>();
             services.AddTransient<PollHandler, PollHandler>();
             services.AddTransient<OptionPollHandler, OptionPollHandler>();
+
+            //autorização por meio do firebase
+            #region autorização firebase
+            //services
+            //   .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //   .AddJwtBearer(options =>
+            //   {
+            //       options.Authority = "https://securetoken.google.com/polls-f56df";
+            //       options.TokenValidationParameters = new TokenValidationParameters
+            //       {
+            //           ValidateIssuer = true,
+            //           ValidIssuer = "https://securetoken.google.com/polls-f56df",
+            //           ValidateAudience = true,
+            //           ValidAudience = "polls-f56df",
+            //           ValidateLifetime = true
+            //       };
+            //   });
+
+            #endregion
+
+
 
         }
 

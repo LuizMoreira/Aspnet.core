@@ -5,6 +5,7 @@ using PollContext.Domain.Repositories;
 using PollContext.Infra.Contexts;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PollContext.Infra.Repositories
 {
@@ -18,9 +19,9 @@ namespace PollContext.Infra.Repositories
             _context = dataContext;
         }
 
-        public OptionPoll GetOptionPollById(Guid id, Guid poll_Id)
+        public Task<OptionPoll> GetOptionPollById(Guid id, Guid poll_Id)
         {
-            return _context.OptionsPoll.FirstOrDefault(OptionPollQueries.GetById(id, poll_Id));
+            return _context.OptionsPoll.FirstOrDefaultAsync(OptionPollQueries.GetById(id, poll_Id));
         }
 
         public void Update(OptionPoll optionPoll)
