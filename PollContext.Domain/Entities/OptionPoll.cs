@@ -19,7 +19,6 @@ namespace PollContext.Domain.Entities
 
         }
 
-        //set private evita manipulação fora da criação da classe; caso seja necessário alterar, vms criar um método de alterar a propriedade
         public DescriptionVO Description { get; private set; }
 
         public Guid Poll_Id { get; private set; }
