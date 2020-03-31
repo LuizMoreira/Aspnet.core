@@ -27,6 +27,10 @@ namespace PollContext.webapi.Controllers
             
         }
         
+        //Para cache de método
+        //[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)]
+        //para dizer que o método não é cache, teria que habilitar o cache geral na startup com services.AddResponseCaching();
+        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         //com restrição de rota
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<GenericCommandResult>> Get(Guid id, [FromServices] PollHandler handler)
