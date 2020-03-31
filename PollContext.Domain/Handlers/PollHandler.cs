@@ -78,9 +78,9 @@ namespace PollContext.Domain.Handlers
 
                 return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollByIdCommandResult);
             }
-            catch 
+            catch (Exception ex)
             {
-                return new GenericCommandResult(false, "Falha ao obter enquete", null);
+                return new GenericCommandResult(false, "Falha ao obter enquete", ex);
             }
 
         }

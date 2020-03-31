@@ -43,7 +43,7 @@ namespace PollContext.webapi
             services.AddControllers();
             var config = Configuration.GetConnectionString("connectionString");
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(config));
-            //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
+            //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Poll"));
 
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IPollRepository, PollRepository>();
