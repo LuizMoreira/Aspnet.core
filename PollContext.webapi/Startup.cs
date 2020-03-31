@@ -16,6 +16,7 @@ using PollContext.Domain.Services;
 using PollContext.Infra.Services;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.Linq;
+using Microsoft.OpenApi.Models;
 
 namespace PollContext.webapi
 {
@@ -93,7 +94,10 @@ namespace PollContext.webapi
             #endregion
 
 
-
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Enquete Api", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -104,6 +108,17 @@ namespace PollContext.webapi
             }
 
             app.UseHttpsRedirection();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquete V1");
+            });
+
 
             app.UseRouting();
             app.UseCors(x => x
