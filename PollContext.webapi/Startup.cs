@@ -10,6 +10,10 @@ using PollContext.Domain.Repositories;
 using PollContext.Infra.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using PollContext.Infra.Settings;
+using PollContext.Domain.Services;
+using PollContext.Infra.Services;
 
 namespace PollContext.webapi
 {
@@ -29,13 +33,37 @@ namespace PollContext.webapi
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(config));
             //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
 
+            services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IPollRepository, PollRepository>();
             services.AddTransient<IOptionPollRepository, OptionPollRepository>();
             services.AddTransient<PollHandler, PollHandler>();
             services.AddTransient<OptionPollHandler, OptionPollHandler>();
 
+
+            #region autorização 
+            var key = Encoding.ASCII.GetBytes(Setting.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            #endregion
+
             //autorização por meio do firebase
-            #region autorização firebase
+            #region autorização google firebase 
             //services
             //   .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //   .AddJwtBearer(options =>
