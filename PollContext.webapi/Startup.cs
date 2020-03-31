@@ -14,6 +14,8 @@ using System.Text;
 using PollContext.Infra.Settings;
 using PollContext.Domain.Services;
 using PollContext.Infra.Services;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.Linq;
 
 namespace PollContext.webapi
 {
@@ -28,6 +30,15 @@ namespace PollContext.webapi
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors();
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/json" });
+            });
+
+            // services.AddResponseCaching();
             services.AddControllers();
             var config = Configuration.GetConnectionString("connectionString");
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(config));
