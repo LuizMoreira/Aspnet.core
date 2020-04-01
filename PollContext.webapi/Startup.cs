@@ -17,6 +17,8 @@ using PollContext.Infra.Services;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.Linq;
 using Microsoft.OpenApi.Models;
+using Elmah.Io.AspNetCore;
+using System;
 
 namespace PollContext.webapi
 {
@@ -51,8 +53,8 @@ namespace PollContext.webapi
             services.AddTransient<PollHandler, PollHandler>();
             services.AddTransient<OptionPollHandler, OptionPollHandler>();
 
-
-            #region autorização 
+            //autenticação local
+            #region autenticação local 
             var key = Encoding.ASCII.GetBytes(Setting.Secret);
             services.AddAuthentication(x =>
             {
@@ -75,7 +77,7 @@ namespace PollContext.webapi
             #endregion
 
             //autorização por meio do firebase
-            #region autorização google firebase 
+            #region autenticação google firebase 
             //services
             //   .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //   .AddJwtBearer(options =>
@@ -98,6 +100,13 @@ namespace PollContext.webapi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Enquete Api", Version = "v1" });
             });
+
+            //services.AddElmahIo();
+            services.AddElmahIo(o =>
+            {
+                o.ApiKey = "48cafea287cf4b6da4fd614c555deb15";
+                o.LogId = new Guid("24bd0a4a-7158-4bad-bae9-acd03c2a3a56");
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -108,17 +117,6 @@ namespace PollContext.webapi
             }
 
             app.UseHttpsRedirection();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquete V1");
-            });
-
 
             app.UseRouting();
             app.UseCors(x => x
@@ -134,6 +132,15 @@ namespace PollContext.webapi
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquete V1");
+            });
+
+            app.UseElmahIo();
+
         }
     }
 }
