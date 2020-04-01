@@ -101,12 +101,12 @@ namespace PollContext.webapi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Enquete Api", Version = "v1" });
             });
 
-            //services.AddElmahIo();
-            services.AddElmahIo(o =>
-            {
-                o.ApiKey = "48cafea287cf4b6da4fd614c555deb15";
-                o.LogId = new Guid("24bd0a4a-7158-4bad-bae9-acd03c2a3a56");
-            });
+            //elmah log web.
+            //services.AddElmahIo(o =>
+            //{
+            //    o.ApiKey = "48cafea287cf4b6da4fd614c555deb15";
+            //    o.LogId = new Guid("24bd0a4a-7158-4bad-bae9-acd03c2a3a56");
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -139,7 +139,8 @@ namespace PollContext.webapi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquete V1");
             });
 
-            app.UseElmahIo();
+            //log com elmah
+            //app.UseElmahIo();
 
         }
     }
