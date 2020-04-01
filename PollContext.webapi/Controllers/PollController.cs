@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PollContext.Domain.Commands.OptionPollCommands.Input;
 using PollContext.Domain.Commands.PollCommands.Input;
 using PollContext.Domain.Handlers;
@@ -15,6 +16,13 @@ namespace PollContext.webapi.Controllers
     //[Authorize]
     public class PollController : ControllerBase
     {
+        private readonly ILogger _logger;
+
+        public PollController(ILoggerFactory logger)
+        {
+            _logger = logger.CreateLogger("WebAPI.PollController");
+        }
+
         [Route("")]
         [HttpPost]
         public async Task<ActionResult<GenericCommandResult>> Post([FromBody] CreatePollCommand command, [FromServices] PollHandler handler)
@@ -22,7 +30,12 @@ namespace PollContext.webapi.Controllers
             //var user = User.Claims.FirstOrDefault(x=>x.Type == "user_id")?.Value;
             var ret = (GenericCommandResult)await handler.Handle(command);
             if (!ret.Success)
-                BadRequest(ret);
+            {
+                _logger.LogWarning("Post --> ", ret);
+                return BadRequest(ret);
+
+            }
+            _logger.LogInformation("Post --> ", ret);
             return Ok(ret);
             
         }
@@ -37,18 +50,26 @@ namespace PollContext.webapi.Controllers
         {
             var ret = (GenericCommandResult) await handler.Handle(new GetPollByIdCommand(id));
             if (!ret.Success)
-                BadRequest(ret);
+            {
+                _logger.LogWarning("Get --> {Id}",id, ret);
+                return BadRequest(ret);
+            }
+            _logger.LogInformation("Get --> {Id}", id, ret);
+
             return Ok(ret);
 
         }
 
         [HttpPost("{id:Guid}/vote")]
-        public async Task<ActionResult<GenericCommandResult>> Post(Guid id, [FromBody] VoteOptionPollCommand command, [FromServices] OptionPollHandler handler)
+        public async Task<ActionResult<GenericCommandResult>> Vote(Guid id, [FromBody] VoteOptionPollCommand command, [FromServices] OptionPollHandler handler)
         {
             command.Poll_Id = id;
             var ret = (GenericCommandResult)await handler.Handle(command);
             if (!ret.Success)
-                BadRequest(ret);
+            {
+                _logger.LogWarning("Vote --> {Id}", id, ret);
+                return BadRequest(ret);
+            }
             return Ok(ret);
 
         }
@@ -58,7 +79,10 @@ namespace PollContext.webapi.Controllers
         {
             var ret = (GenericCommandResult)await handler.Handle(new GetPollStatsByIdCommand(id));
             if (!ret.Success)
-                BadRequest(ret);
+            {
+                _logger.LogWarning("GetStats --> {Id}", id, ret);
+                return BadRequest(ret);
+            }
             return Ok(ret);
 
         }

@@ -17,8 +17,6 @@ using PollContext.Infra.Services;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.Linq;
 using Microsoft.OpenApi.Models;
-using Elmah.Io.AspNetCore;
-using System;
 
 namespace PollContext.webapi
 {
