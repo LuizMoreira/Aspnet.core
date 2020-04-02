@@ -1,4 +1,5 @@
 ﻿using Flunt.Notifications;
+using Microsoft.Extensions.Logging;
 using PollContext.Domain.Commands.PollCommands.Input;
 using PollContext.Domain.Commands.PollCommands.Output;
 using PollContext.Domain.Entities;
@@ -16,10 +17,14 @@ namespace PollContext.Domain.Handlers
     public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<GetPollByIdCommand>, IHandler<GetPollStatsByIdCommand>
     {
         private readonly IPollRepository _pollRepository;
-        
-        public PollHandler(IPollRepository pollRepository)
+        private readonly ILogger _logger;
+
+
+        public PollHandler(IPollRepository pollRepository, ILoggerFactory logger)
         {
             _pollRepository = pollRepository;
+            _logger = logger.CreateLogger("Domain.Handlers.PollHandler");
+
         }
 
         public async Task<ICommandResult> Handle(CreatePollCommand command)
@@ -46,8 +51,9 @@ namespace PollContext.Domain.Handlers
 
                 return new GenericCommandResult(true, "Enquete gravada com sucesso", new CreatePollCommandResult(poll.Id));
             }
-            catch 
+            catch (Exception ex)
             {
+                _logger.LogError("CreatePollCommand --> ", ex);
                 return new GenericCommandResult(false, "Falha ao gravar enquete", null);
             }
         }
@@ -80,6 +86,7 @@ namespace PollContext.Domain.Handlers
             }
             catch (Exception ex)
             {
+                _logger.LogError("VoteOptionPollCommand --> {Poll_Id}", command.Poll_Id, ex);
                 return new GenericCommandResult(false, "Falha ao obter enquete", ex);
             }
 
@@ -105,8 +112,9 @@ namespace PollContext.Domain.Handlers
 
                 return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollStatsByIdCommandResult);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError("GetPollStatsByIdCommand --> {Poll_Id}", command.Poll_Id, ex);
                 return new GenericCommandResult(false, "Falha ao obter a estatística de uma enquete", null);
             }
         }

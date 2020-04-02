@@ -1,4 +1,5 @@
 ﻿using Flunt.Notifications;
+using Microsoft.Extensions.Logging;
 using PollContext.Domain.Commands.OptionPollCommands.Input;
 using PollContext.Domain.Repositories;
 using PollContext.Shared.Commands;
@@ -12,10 +13,14 @@ namespace PollContext.Domain.Handlers
     public class OptionPollHandler : Notifiable, IHandler<VoteOptionPollCommand>
     {
         private readonly IOptionPollRepository _optionPollRepository;
+        private readonly ILogger _logger;
+        
 
-        public OptionPollHandler(IOptionPollRepository optionPollRepository)
+
+        public OptionPollHandler(IOptionPollRepository optionPollRepository, ILoggerFactory logger)
         {
             _optionPollRepository = optionPollRepository;
+            _logger = logger.CreateLogger("Domain.Handlers.OptionPollHandler");
         }
 
 
@@ -43,6 +48,7 @@ namespace PollContext.Domain.Handlers
             }
             catch (Exception ex)
             {
+                _logger.LogError("VoteOptionPollCommand --> {Poll_Id} e {Option_Id}", command.Poll_Id, command.Option_Id, ex);
                 return new GenericCommandResult(false, "Falha ao votar em uma enquete", ex);
             }
         }
