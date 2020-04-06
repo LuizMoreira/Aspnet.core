@@ -82,7 +82,7 @@ namespace PollContext.Domain.Handlers
                     getPollByIdCommandResult.options.Add(new GetOptionsPollByPolIdCommandResult(item.Id, item.Description.Description));
                 }
 
-                return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollByIdCommandResult);
+                return new GenericCommandResult(true, "Enquete recuperada com sucesso", getPollByIdCommandResult);
             }
             catch (Exception ex)
             {
@@ -110,7 +110,7 @@ namespace PollContext.Domain.Handlers
                     getPollStatsByIdCommandResult.options.Add(new GetOptionsPollStatsByPolIdCommandResult(item.Id, item.Qty));
                 }
 
-                return new GenericCommandResult(true, "Enquete gravada com sucesso", getPollStatsByIdCommandResult);
+                return new GenericCommandResult(true, "Status da enquete obtida com sucesso", getPollStatsByIdCommandResult);
             }
             catch (Exception ex)
             {
