@@ -4,11 +4,12 @@ using PollContext.Domain.Entities;
 using PollContext.Domain.Handlers;
 using PollContext.Domain.ValueObjects;
 using PollContext.Shared.Commands;
-using PollContext.Test.Repositories;
 using System.Collections.Generic;
-
 using System;
 using System.Threading.Tasks;
+using PollContext.Test.FakeRepositories;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace PollContext.Test.HandlerTests
 {
@@ -21,12 +22,16 @@ namespace PollContext.Test.HandlerTests
         private readonly CreatePollCommand _createPollCommandInvalid;
         private readonly GetPollByIdCommand _getPollByIdCommandValid;
         private readonly GetPollByIdCommand _getPollByIdCommandInvalid;
-        
+        private Mock<ILoggerFactory> _mockLogger;
+
         private List<Poll> _polls;
 
         public PollHandlerTests()
         {
             //Arrange
+            //_logger = new Lo
+            //_logger = logger.CreateLogger("PollContext.Test.HandlerTests");
+            _mockLogger = new Mock<ILoggerFactory>();
             _createPollCommandValid = new CreatePollCommand();
             _createPollCommandValid.Poll_Description = "poll 1";
             string option1 = "option 1";
@@ -76,7 +81,7 @@ namespace PollContext.Test.HandlerTests
         public async Task ShouldReturnGenericCommandResultSucessTrueWhenCreatePollCommandIsValid()
         {
 
-            PollHandler _handler = new PollHandler(new FakePollRepository());
+            PollHandler _handler = new PollHandler(new FakePollRepository(), _mockLogger.Object);
             var result = (GenericCommandResult)await _handler.Handle(_createPollCommandValid);
 
             Assert.IsTrue(_createPollCommandValid.Valid);
@@ -87,7 +92,7 @@ namespace PollContext.Test.HandlerTests
         [TestMethod]
         public async Task ShouldReturnGenericCommandResultSucessTrueWhenCreatePollCommandIsInvalid()
         {
-            PollHandler _handler = new PollHandler(new FakePollRepository());
+            PollHandler _handler = new PollHandler(new FakePollRepository(), _mockLogger.Object);
             var result = (GenericCommandResult) await _handler.Handle(_createPollCommandInvalid);
 
             Assert.IsFalse(_createPollCommandInvalid.Valid);
@@ -99,7 +104,7 @@ namespace PollContext.Test.HandlerTests
         [TestMethod]
         public async Task ShouldReturnGenericCommandResultSucessTrueWhenGetPollByIdCommandIsValid()
         {
-         PollHandler _handler = new PollHandler(new FakePollRepository());
+         PollHandler _handler = new PollHandler(new FakePollRepository(), _mockLogger.Object);
         var result = (GenericCommandResult) await _handler.Handle(_getPollByIdCommandValid);
 
             Assert.IsTrue(_getPollByIdCommandValid.Valid);
@@ -109,7 +114,7 @@ namespace PollContext.Test.HandlerTests
         [TestMethod]
         public async Task ShouldReturnGenericCommandResultSucessTrueWhenGetPollByIdCommandIsInvalid()
         {
-            PollHandler _handler = new PollHandler(new FakePollRepository());
+            PollHandler _handler = new PollHandler(new FakePollRepository(), _mockLogger.Object);
             var result = (GenericCommandResult) await _handler.Handle(_getPollByIdCommandInvalid);
 
             Assert.IsFalse(_getPollByIdCommandInvalid.Valid);
@@ -119,7 +124,7 @@ namespace PollContext.Test.HandlerTests
         [TestMethod]
         public async Task ShouldReturnGenericCommandResultSucessTrueGetPollByIdCommandResultWhenGetPollByIdCommandIsValid()
         {
-            PollHandler _handler = new PollHandler(new FakePollRepository());
+            PollHandler _handler = new PollHandler(new FakePollRepository(), _mockLogger.Object);
             var result = (GenericCommandResult) await _handler.Handle(_getPollByIdCommandValid);
 
             Assert.IsTrue(_getPollByIdCommandValid.Valid);
