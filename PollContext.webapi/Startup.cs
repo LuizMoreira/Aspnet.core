@@ -1,22 +1,23 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PollContext.Infra.Contexts;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PollContext.Domain.Handlers;
 using PollContext.Domain.Repositories;
-using PollContext.Infra.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using PollContext.Infra.Settings;
 using PollContext.Domain.Services;
+using PollContext.Infra.Contexts;
+using PollContext.Infra.Repositories;
 using PollContext.Infra.Services;
-using Microsoft.AspNetCore.ResponseCompression;
+using PollContext.Shared;
+using System.IO;
 using System.Linq;
-using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace PollContext.webapi
 {
@@ -27,11 +28,10 @@ namespace PollContext.webapi
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddCors();
             services.AddResponseCompression(options =>
             {
@@ -53,7 +53,7 @@ namespace PollContext.webapi
 
             //autenticação local
             #region autenticação local 
-            var key = Encoding.ASCII.GetBytes(Setting.Secret);
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,6 +99,7 @@ namespace PollContext.webapi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Enquete Api", Version = "v1" });
             });
 
+            Settings.ConnectionString = $"{Configuration["connectionString"]}";
             //elmah log web.
             //services.AddElmahIo(o =>
             //{

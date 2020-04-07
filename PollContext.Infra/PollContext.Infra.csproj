@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PollContext.Domain\PollContext.Domain.csproj" />
+    <ProjectReference Include="..\PollContext.Shared\PollContext.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
