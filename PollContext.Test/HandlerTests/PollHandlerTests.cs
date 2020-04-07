@@ -29,8 +29,6 @@ namespace PollContext.Test.HandlerTests
         public PollHandlerTests()
         {
             //Arrange
-            //_logger = new Lo
-            //_logger = logger.CreateLogger("PollContext.Test.HandlerTests");
             _mockLogger = new Mock<ILoggerFactory>();
             _createPollCommandValid = new CreatePollCommand();
             _createPollCommandValid.Poll_Description = "poll 1";
