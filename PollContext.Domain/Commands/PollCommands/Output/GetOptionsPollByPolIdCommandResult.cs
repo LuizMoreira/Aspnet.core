@@ -6,17 +6,17 @@ using System.Collections.Generic;
 
 namespace PollContext.Domain.Commands.PollCommands.Output
 {
-    public class GetOptionsPollStatsByPolIdCommandResult : ICommandResult
+    public class GetOptionsPollByPolIdCommandResult : ICommandResult
     {
-        public GetOptionsPollStatsByPolIdCommandResult(Guid option_id, int qty)
+        public GetOptionsPollByPolIdCommandResult(Guid option_id, string option_description)
         {
             Option_id = option_id;
-            Qty = qty;
+            this.option_description = option_description;
         }
 
         public Guid Option_id { get; set; }
 
-        public int Qty { get; set; }
+        public string option_description { get; set; }
 
 
     }

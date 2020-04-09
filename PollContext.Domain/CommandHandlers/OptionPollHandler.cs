@@ -8,7 +8,7 @@ using PollContext.Shared.Handlers.Contracts;
 using System;
 using System.Threading.Tasks;
 
-namespace PollContext.Domain.Handlers
+namespace PollContext.Domain.CommandHandlers
 {
     public class OptionPollHandler : Notifiable, IHandler<VoteOptionPollCommand>
     {
@@ -20,7 +20,7 @@ namespace PollContext.Domain.Handlers
         public OptionPollHandler(IOptionPollRepository optionPollRepository, ILoggerFactory logger)
         {
             _optionPollRepository = optionPollRepository;
-            _logger = logger.CreateLogger("Domain.Handlers.OptionPollHandler");
+            _logger = logger.CreateLogger("Domain.CommandHandlers.OptionPollHandler");
         }
 
 

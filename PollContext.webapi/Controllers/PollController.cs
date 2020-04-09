@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PollContext.Domain.CommandHandlers;
 using PollContext.Domain.Commands.OptionPollCommands.Input;
 using PollContext.Domain.Commands.PollCommands.Input;
 using PollContext.Domain.Handlers;
+using PollContext.Domain.Queries.PollQueriesInput;
+using PollContext.Domain.Repositories;
+using PollContext.Infra.Repositories;
 using PollContext.Shared.Commands;
+using PollContext.Shared.Queries;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PollContext.webapi.Controllers
@@ -17,10 +20,12 @@ namespace PollContext.webapi.Controllers
     public class PollController : ControllerBase
     {
         private readonly ILogger _logger;
+        private readonly IPollQueryRepository _pollQueryRepository;
 
-        public PollController(ILoggerFactory logger)
+        public PollController(ILoggerFactory logger, IPollQueryRepository pollQueryRepository)
         {
             _logger = logger.CreateLogger("WebAPI.PollController");
+            _pollQueryRepository = pollQueryRepository;
         }
 
         [Route("")]
@@ -75,9 +80,9 @@ namespace PollContext.webapi.Controllers
         }
 
         [HttpGet("{id:Guid}/stats")]
-        public async Task<ActionResult<GenericCommandResult>> GetStats(Guid id, [FromServices] PollHandler handler)
+        public async Task<ActionResult<GenericQueryResult>> GetStats(Guid id)
         {
-            var ret = (GenericCommandResult)await handler.Handle(new UpdatePollStatsByIdCommand(id));
+            var ret = (GenericQueryResult)await _pollQueryRepository.GetStatsById(new GetPollStatsQuery(id));
             if (!ret.Success)
             {
                 _logger.LogWarning("GetStats --> {Id}", id, ret);

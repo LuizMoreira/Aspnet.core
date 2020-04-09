@@ -1,7 +1,5 @@
-﻿using PollContext.Domain.Commands.PollCommands.Output;
-using PollContext.Domain.Entities;
+﻿using PollContext.Domain.Entities;
 using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace PollContext.Domain.Repositories

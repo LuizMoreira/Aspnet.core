@@ -8,12 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PollContext.Domain.CommandHandlers;
 using PollContext.Domain.Handlers;
 using PollContext.Domain.Repositories;
 using PollContext.Domain.Services;
 using PollContext.Infra.Contexts;
 using PollContext.Infra.Repositories;
 using PollContext.Infra.Services;
+using PollContext.Infra.Uow;
 using PollContext.Shared;
 using System.IO;
 using System.Linq;
@@ -42,14 +44,24 @@ namespace PollContext.webapi
             // services.AddResponseCaching();
             services.AddControllers();
             var config = Configuration.GetConnectionString("connectionString");
+
+            services.AddScoped<IUow, Uow>();
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(config));
             //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Poll"));
 
+            //IOC para base de leitura ainda não implementada
+            services.AddTransient<IPollQueryRepository, PollQueryRepository>();
+
             services.AddTransient<ITokenService, TokenService>();
+
+            //IOC para dbcontext
             services.AddTransient<IPollRepository, PollRepository>();
             services.AddTransient<IOptionPollRepository, OptionPollRepository>();
+
+
             services.AddTransient<PollHandler, PollHandler>();
             services.AddTransient<OptionPollHandler, OptionPollHandler>();
+
 
             //autenticação local
             #region autenticação local 

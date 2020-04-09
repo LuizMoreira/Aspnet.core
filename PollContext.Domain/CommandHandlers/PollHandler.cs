@@ -1,5 +1,6 @@
 ﻿using Flunt.Notifications;
 using Microsoft.Extensions.Logging;
+using PollContext.Domain.CommandHandlers;
 using PollContext.Domain.Commands.PollCommands.Input;
 using PollContext.Domain.Commands.PollCommands.Output;
 using PollContext.Domain.Entities;
@@ -14,13 +15,13 @@ using System.Threading.Tasks;
 
 namespace PollContext.Domain.Handlers
 {
-    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<UpdatePollByIdCommand>, IHandler<UpdatePollStatsByIdCommand>
+    public class PollHandler :  CommandHandler, IHandler<CreatePollCommand>, IHandler<UpdatePollByIdCommand>
     {
         private readonly IPollRepository _pollRepository;
         private readonly ILogger _logger;
 
 
-        public PollHandler(IPollRepository pollRepository, ILoggerFactory logger)
+        public PollHandler(IPollRepository pollRepository, ILoggerFactory logger, IUow uow):base(uow)
         {
             _pollRepository = pollRepository;
             _logger = logger.CreateLogger("Domain.Handlers.PollHandler");
@@ -48,8 +49,11 @@ namespace PollContext.Domain.Handlers
                 }
 
                 await _pollRepository.Create(poll);
+                if (Commit())
+                    return new GenericCommandResult(true, "Enquete gravada com sucesso", new CreatePollCommandResult(poll.Id));
+                else
+                    return new GenericCommandResult(false, "Falha ao gravar enquete", null);
 
-                return new GenericCommandResult(true, "Enquete gravada com sucesso", new CreatePollCommandResult(poll.Id));
             }
             catch (Exception ex)
             {
@@ -82,7 +86,11 @@ namespace PollContext.Domain.Handlers
                     getPollByIdCommandResult.options.Add(new GetOptionsPollByPolIdCommandResult(item.Id, item.Description.Description));
                 }
 
-                return new GenericCommandResult(true, "Enquete recuperada com sucesso", getPollByIdCommandResult);
+                if (Commit())
+                    return new GenericCommandResult(true, "Enquete recuperada com sucesso", getPollByIdCommandResult);
+                else
+                    return new GenericCommandResult(false, "Falha ao recuperar enquete enquete", null);
+
             }
             catch (Exception ex)
             {
@@ -92,32 +100,7 @@ namespace PollContext.Domain.Handlers
 
         }
 
-        public async Task<ICommandResult> Handle(UpdatePollStatsByIdCommand command)
-        {
-            try
-            {
-                command.Validate();
-                if (command.Invalid)
-                    return new GenericCommandResult(true, "Enquete inválida", command.Notifications);
-
-                var poll = await _pollRepository.GetById(command.Poll_Id);
-
-                if (poll == null) return new GenericCommandResult(true, "Enquete não encontrada", null);
-
-                GetPollStatsByIdCommandResult getPollStatsByIdCommandResult = new GetPollStatsByIdCommandResult(poll.Id, poll.Views);
-                foreach (var item in poll.OptionsPoll)
-                {
-                    getPollStatsByIdCommandResult.options.Add(new GetOptionsPollStatsByPolIdCommandResult(item.Id, item.Qty));
-                }
-
-                return new GenericCommandResult(true, "Status da enquete obtida com sucesso", getPollStatsByIdCommandResult);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("GetPollStatsByIdCommand --> {Poll_Id}", command.Poll_Id, ex);
-                return new GenericCommandResult(false, "Falha ao obter a estatística de uma enquete", null);
-            }
-        }
+        
 
     }
 }

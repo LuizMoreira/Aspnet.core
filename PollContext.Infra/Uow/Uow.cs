@@ -1,19 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using PollContext.Domain.Repositories;
 using PollContext.Infra.Contexts;
-using PollContext.Infra.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using PollContext.Domain.Repositories;
 
 namespace PollContext.Infra.Uow
 {
     public class Uow : IUow, IDisposable
     {
         private IDbContextTransaction _transaction;
-        private PollRepository _pollRepository = null;
-        private OptionPollRepository _optionPollRepository = null;
-
         public DataContext _context { get; }
 
         public Uow(DataContext context)
@@ -21,40 +15,6 @@ namespace PollContext.Infra.Uow
             _context = context;
         }
 
-
-        #region Repositories
-
-        /// <summary>
-        /// Poll Repository
-        /// </summary>
-        public IPollRepository PollRepository
-        {
-            get
-            {
-                if (_pollRepository == null)
-                {
-                    _pollRepository = new PollRepository(_context);
-                }
-                return _pollRepository;
-            }
-        }
-
-        /// <summary>
-        /// Options poll
-        /// </summary>
-        public IOptionPollRepository OptionPollRepository
-        {
-            get
-            {
-                if (_optionPollRepository == null)
-                {
-                    _optionPollRepository = new OptionPollRepository(_context);
-                }
-                return _optionPollRepository;
-            }
-        }
-
-        #endregion
 
 
         public IDbContextTransaction BeginEfTransaction()
@@ -78,10 +38,12 @@ namespace PollContext.Infra.Uow
             _transaction.Rollback();
             _transaction = null;
         }
-        public void SaveChanges()
+
+        public bool Commit()
         {
-            _context.SaveChanges();
+            return _context.SaveChanges() > 0;
         }
+
 
 
         #region disposed

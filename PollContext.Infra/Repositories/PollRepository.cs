@@ -21,7 +21,7 @@ namespace PollContext.Infra.Repositories
         public async Task Create(Poll poll)
         {
             await _context.Polls.AddAsync(poll);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
 
       
@@ -35,7 +35,8 @@ namespace PollContext.Infra.Repositories
             try
             {
                 _context.Entry(poll).State = EntityState.Modified;
-                return _context.SaveChangesAsync();
+                return Task.CompletedTask;
+                //return _context.SaveChangesAsync();
 
             }
             catch (DbUpdateConcurrencyException ex)

@@ -1,19 +1,12 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using PollContext.Shared.Commands.Contracts;
 using System;
 
-namespace PollContext.Domain.Commands.PollCommands.Input
+namespace PollContext.Domain.Queries.PollQueriesInput
 {
-    public class UpdatePollByIdCommand : Notifiable, ICommand
+    public class GetPollStatsQuery : Notifiable
     {
-
-        public UpdatePollByIdCommand()
-        {
-
-        }
-
-        public UpdatePollByIdCommand(Guid poll_Id)
+        public GetPollStatsQuery(Guid poll_Id)
         {
             Poll_Id = poll_Id;
         }
@@ -27,6 +20,6 @@ namespace PollContext.Domain.Commands.PollCommands.Input
                            .Requires()
                            .IsNotEmpty(Poll_Id, "Poll_Id", "Identificador é obrigatório"));
 
-                    }
+        }
     }
 }
