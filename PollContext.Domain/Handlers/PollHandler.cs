@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PollContext.Domain.Handlers
 {
-    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<GetPollByIdCommand>, IHandler<GetPollStatsByIdCommand>
+    public class PollHandler : Notifiable, IHandler<CreatePollCommand>, IHandler<UpdatePollByIdCommand>, IHandler<UpdatePollStatsByIdCommand>
     {
         private readonly IPollRepository _pollRepository;
         private readonly ILogger _logger;
@@ -58,7 +58,7 @@ namespace PollContext.Domain.Handlers
             }
         }
 
-        public async Task<ICommandResult> Handle(GetPollByIdCommand command)
+        public async Task<ICommandResult> Handle(UpdatePollByIdCommand command)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace PollContext.Domain.Handlers
 
         }
 
-        public async Task<ICommandResult> Handle(GetPollStatsByIdCommand command)
+        public async Task<ICommandResult> Handle(UpdatePollStatsByIdCommand command)
         {
             try
             {

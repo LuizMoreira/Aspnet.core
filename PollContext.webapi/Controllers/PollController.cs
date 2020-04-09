@@ -48,7 +48,7 @@ namespace PollContext.webapi.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<GenericCommandResult>> Get(Guid id, [FromServices] PollHandler handler)
         {
-            var ret = (GenericCommandResult) await handler.Handle(new GetPollByIdCommand(id));
+            var ret = (GenericCommandResult) await handler.Handle(new UpdatePollByIdCommand(id));
             if (!ret.Success)
             {
                 _logger.LogWarning("Get --> {Id}",id, ret);
@@ -77,7 +77,7 @@ namespace PollContext.webapi.Controllers
         [HttpGet("{id:Guid}/stats")]
         public async Task<ActionResult<GenericCommandResult>> GetStats(Guid id, [FromServices] PollHandler handler)
         {
-            var ret = (GenericCommandResult)await handler.Handle(new GetPollStatsByIdCommand(id));
+            var ret = (GenericCommandResult)await handler.Handle(new UpdatePollStatsByIdCommand(id));
             if (!ret.Success)
             {
                 _logger.LogWarning("GetStats --> {Id}", id, ret);

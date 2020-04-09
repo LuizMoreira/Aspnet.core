@@ -6,15 +6,15 @@ using System.Collections.Generic;
 
 namespace PollContext.Domain.Commands.PollCommands.Input
 {
-    public class GetPollByIdCommand : Notifiable, ICommand
+    public class UpdatePollByIdCommand : Notifiable, ICommand
     {
 
-        public GetPollByIdCommand()
+        public UpdatePollByIdCommand()
         {
 
         }
 
-        public GetPollByIdCommand(Guid poll_Id)
+        public UpdatePollByIdCommand(Guid poll_Id)
         {
             Poll_Id = poll_Id;
         }

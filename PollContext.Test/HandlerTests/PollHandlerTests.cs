@@ -20,8 +20,8 @@ namespace PollContext.Test.HandlerTests
 
         private readonly CreatePollCommand _createPollCommandValid;
         private readonly CreatePollCommand _createPollCommandInvalid;
-        private readonly GetPollByIdCommand _getPollByIdCommandValid;
-        private readonly GetPollByIdCommand _getPollByIdCommandInvalid;
+        private readonly UpdatePollByIdCommand _getPollByIdCommandValid;
+        private readonly UpdatePollByIdCommand _getPollByIdCommandInvalid;
         private Mock<ILoggerFactory> _mockLogger;
 
         private List<Poll> _polls;
@@ -63,8 +63,8 @@ namespace PollContext.Test.HandlerTests
 
 
 
-            _getPollByIdCommandValid = new GetPollByIdCommand(Guid.NewGuid());
-            _getPollByIdCommandInvalid = new GetPollByIdCommand();
+            _getPollByIdCommandValid = new UpdatePollByIdCommand(Guid.NewGuid());
+            _getPollByIdCommandInvalid = new UpdatePollByIdCommand();
             
 
 
