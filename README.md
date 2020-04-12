@@ -4,6 +4,8 @@
 
 O objetivo desse código é criar uma API RESTful para a utilização de uma simples enquete. Apesar do escopo ser pequeno, o desenvolvimento utiliza as melhores práticas para desenvolviemnto de webapi utilizadas atualmente. 
 
+*Ainda não foi criado um projeto e banco separados para serem replicados os dados para leitura da query repository. O contexto de query está comparitlhando o mesmo dbcontext de escrita* 
+
 ## Requisitos
 
 O banco de dados utilizado para a aplicação é o SQL Server 2012 ou superior;
