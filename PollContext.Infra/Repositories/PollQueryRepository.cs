@@ -18,13 +18,13 @@ namespace PollContext.Infra.Repositories
 
         //TODO:APÓS CRIAR BANCO SOMENTE DE LEITURA, ALTERAR O DATACONTEXT
         private readonly DataContext _context;
-//        private readonly ILogger _logger;
+        private readonly ILogger _logger;
 
 
-        public PollQueryRepository(DataContext dataContext)//, ILoggerFactory logger)
+        public PollQueryRepository(DataContext dataContext, ILoggerFactory logger)
         {
             _context = dataContext;
-            //_logger = logger.CreateLogger("PollContext.Infra.Repositories");
+            _logger = logger.CreateLogger("PollContext.Infra.Repositories");
 
         }
         
