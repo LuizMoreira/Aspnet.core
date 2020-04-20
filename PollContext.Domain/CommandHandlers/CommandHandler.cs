@@ -15,11 +15,20 @@ namespace PollContext.Domain.CommandHandlers
             _uow = uow;
         }
 
+        protected void NotifyValidationErrors(CommandHandler message)
+        {
+            foreach (var error in message.Notifications)
+            {
+                //enviar pra bus
+                
+            }
+        }
 
         public bool Commit()
         {
+              
             if (_uow.Commit()) return true;
-            //_bus.RaiseEvent(new DomainNotification("Commit", "We had a problem during saving your data."));
+            
             return false;
         }
     }

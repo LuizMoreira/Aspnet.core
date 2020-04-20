@@ -29,7 +29,7 @@ namespace PollContext.Infra.Repositories
             try
             {
                 _context.Entry(optionPoll).State = EntityState.Modified;
-                _context.SaveChanges();
+                //_context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {

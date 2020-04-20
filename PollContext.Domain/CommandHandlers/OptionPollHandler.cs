@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace PollContext.Domain.CommandHandlers
 {
-    public class OptionPollHandler : Notifiable, IHandler<VoteOptionPollCommand>
+    public class OptionPollHandler : CommandHandler, IHandler<VoteOptionPollCommand>
     {
         private readonly IOptionPollRepository _optionPollRepository;
         private readonly ILogger _logger;
         
 
 
-        public OptionPollHandler(IOptionPollRepository optionPollRepository, ILoggerFactory logger)
+        public OptionPollHandler(IOptionPollRepository optionPollRepository, ILoggerFactory logger, IUow uow) : base(uow)
         {
             _optionPollRepository = optionPollRepository;
             _logger = logger.CreateLogger("Domain.CommandHandlers.OptionPollHandler");
@@ -43,8 +43,12 @@ namespace PollContext.Domain.CommandHandlers
                 // salva a alteração feita na qtd
                 _optionPollRepository.Update(optionPoll);
 
-                //TODO: retornar o obj DTO para evitar retornar nossa entity
-                return new GenericCommandResult(true, "Enquete salva com sucesso", null);
+                if (Commit())
+                    return new GenericCommandResult(true, "Enquete salva com sucesso", null);
+                else
+                    return new GenericCommandResult(false, "Falha ao gravar enquete", null);
+
+
             }
             catch (Exception ex)
             {
