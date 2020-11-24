@@ -1,6 +1,6 @@
 # Asp.net core, CQRS, EF core
 
-# Iplmementação envolvendo as melhores práticas adotadas para criação de webapi. 
+# Iplemementação envolvendo as melhores práticas adotadas para criação de webapi. 
 
 O objetivo desse código é criar uma API RESTful para a utilização de uma simples enquete. Apesar do escopo ser pequeno, o desenvolvimento utiliza as melhores práticas para desenvolviemnto de webapi utilizadas atualmente. 
 
